@@ -1,3 +1,32 @@
 page-login {
-
+  .content-md, &.content-ios, &.content-wp {
+    background-color: color($colors, primary);
+    > div {
+      padding-top: 100px;
+      text-align: center;
+      h1 {
+        font-size: 50px;
+        color: color($colors, light);
+      }
+      .list-md, .list-ios, .list-wp {
+        max-width: 400px;
+        margin-left: auto;
+        margin-right: auto;
+        margin-top: 30px;
+        padding-left: 10px;
+        padding-right: 10px;
+        .item-md, .item-ios, .item-wp {
+          margin-bottom: 10px;
+          border-radius: 5px;
+          border: 1px color($colors, primary);
+        }
+        #register-button {
+          float: left;
+        }
+        #login-button {
+          float: right;
+        }
+      }
+    }
+  }
 }
