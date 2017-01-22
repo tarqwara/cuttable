@@ -11,7 +11,6 @@ export class HttpService {
   post(url: String, body: Object) {
     let headers = new Headers({'Content-Type': 'application/json'});
     let options = new RequestOptions({headers: headers});
-    console.log(body);
     return this.http.post(Config.API_URL + url, body, options);
   }
 }
