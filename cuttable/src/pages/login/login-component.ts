@@ -1,5 +1,6 @@
 import {Component} from '@angular/core';
 import {LoginService} from '../../providers/login-service'
+import {Facebook} from 'ionic-native';
 
 @Component({
   selector: 'page-login',
@@ -19,8 +20,8 @@ export class LoginPage {
     }
     this.loginService.register(this.email, this.password)
       .subscribe(
-        () => alert("Register successful"),
-        () => alert("Register error")
+        () => alert('Register successful'),
+        (error) => alert(`Register error: ${error}`)
       );
   }
 
@@ -30,8 +31,16 @@ export class LoginPage {
     }
     this.loginService.login(this.email, this.password)
       .subscribe(
-        () => alert("Login successful"),
-        () => alert("Login error")
+        () => alert('Login successful'),
+        (error) => alert(`Login error: ${error}`)
+      );
+  }
+
+  facebookLogin() {
+    Facebook.login(['public_profile'])
+      .then(
+        () => alert('Login successful'),
+        (error) => alert(`Login error: ${error}`)
       );
   }
 }

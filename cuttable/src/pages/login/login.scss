@@ -15,22 +15,35 @@ page-login {
         padding-left: 10px;
         padding-right: 10px;
         .item-md, .item-ios, .item-wp {
-          padding: 0 10px 5px 10px;
           margin-bottom: 10px;
+          padding: 0 15px 5px;
           border-radius: 5px;
-          border: 1px color($colors, primary);
+          border: 0;
           .item-inner {
             padding: 0;
             input {
-              margin: 13px 8px 8px 8px;
+              margin: 5px 5px 0;
             }
           }
         }
-        #register-button {
-          float: left;
-        }
-        #login-button {
-          float: right;
+        button {
+          &#facebook-button {
+            height: 4.2rem;
+            margin-bottom: 10px;
+            border-radius: 2px;
+            border: 0;
+            ion-icon {
+              font-size: 2em;
+            }
+          }
+          &#register-button {
+            float: left;
+            margin-left: 0;
+          }
+          &#login-button {
+            float: right;
+            margin-right: 0;
+          }
         }
       }
     }
