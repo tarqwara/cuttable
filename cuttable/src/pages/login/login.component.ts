@@ -12,6 +12,18 @@ export class LoginPage {
   password: String;
 
   constructor(public loginService: LoginService) {
+    this.checkIfLoggedIn();
+  }
+
+  checkIfLoggedIn() {
+    if (this.isLoggedInWithFacebook()) {
+
+    }
+  }
+
+  isLoggedInWithFacebook() {
+    return Facebook.getLoginStatus()
+      .then((response) => response.status === 'connected');
   }
 
   register() {
@@ -39,8 +51,11 @@ export class LoginPage {
   facebookLogin() {
     Facebook.login(['public_profile'])
       .then(
-        () => alert('Login successful'),
-        (error) => alert(`Login error: ${error}`)
+        (response) => {
+          if (response.status === 'connected') {
+            alert(response.authResponse.userID);
+          }
+        }
       );
   }
 }
