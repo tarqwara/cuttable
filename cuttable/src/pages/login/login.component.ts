@@ -1,26 +1,22 @@
 import {Component} from '@angular/core';
-import {LoginService} from '../../providers/login-service'
+import {AccountService} from '../../providers/account-service'
 import {Facebook} from 'ionic-native';
+import {ToastController, NavController} from 'ionic-angular';
+import {HomePage} from '../home/home.component';
 
 @Component({
-  selector: 'page-login',
+  selector: 'login-page',
   templateUrl: 'login.html',
-  providers: [LoginService]
+  providers: [AccountService]
 })
 export class LoginPage {
-  email: String;
-  password: String;
+  email: string;
+  password: string;
 
-  constructor(public loginService: LoginService) {
-    this.checkIfLoggedIn();
+  constructor(public accountService: AccountService, public toastCtrl: ToastController, public navCtrl: NavController) {
   }
 
-  checkIfLoggedIn() {
-    if (this.isLoggedInWithFacebook()) {
-
-    }
-  }
-
+  //noinspection JSMethodCanBeStatic
   isLoggedInWithFacebook() {
     return Facebook.getLoginStatus()
       .then((response) => response.status === 'connected');
@@ -30,10 +26,10 @@ export class LoginPage {
     if (!this.email || !this.password) {
       return;
     }
-    this.loginService.register(this.email, this.password)
+    this.accountService.createAccount(this.email, this.password)
       .subscribe(
-        () => alert('Register successful'),
-        (error) => alert(`Register error: ${error}`)
+        () => this.redirectToHomePage(),
+        (response) => this.showToast(response.json().message)
       );
   }
 
@@ -41,10 +37,10 @@ export class LoginPage {
     if (!this.email || !this.password) {
       return;
     }
-    this.loginService.login(this.email, this.password)
+    this.accountService.checkAccountCredentials(this.email, this.password)
       .subscribe(
-        () => alert('Login successful'),
-        (error) => alert(`Login error: ${error}`)
+        () => this.redirectToHomePage(),
+        (response) => this.showToast(response.json().message)
       );
   }
 
@@ -53,9 +49,21 @@ export class LoginPage {
       .then(
         (response) => {
           if (response.status === 'connected') {
-            alert(response.authResponse.userID);
+            this.redirectToHomePage();
           }
         }
       );
+  }
+
+  redirectToHomePage() {
+    this.navCtrl.push(HomePage);
+  }
+
+  showToast(message: string) {
+    let toast = this.toastCtrl.create({
+      message: message,
+      duration: 3000
+    });
+    toast.present();
   }
 }

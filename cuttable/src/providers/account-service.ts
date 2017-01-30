@@ -2,24 +2,23 @@ import {Injectable} from '@angular/core';
 import {HttpService} from './http-service';
 import 'rxjs/add/operator/map';
 
-const REGISTER_URL = '/user/register';
-const LOGIN_URL = '/user/login';
+const ACCOUNTS_ENDPOINT = '/accounts';
 
 @Injectable()
-export class LoginService {
+export class AccountService {
 
   constructor(public httpService: HttpService) {
   }
 
-  register(email: String, password: String) {
-    return this.httpService.post(REGISTER_URL, {
+  checkAccountCredentials(email: string, password: string) {
+    return this.httpService.get(ACCOUNTS_ENDPOINT, {
       email: email,
       password: password
     });
   }
 
-  login(email: String, password: String) {
-    return this.httpService.post(LOGIN_URL, {
+  createAccount(email: string, password: string) {
+    return this.httpService.post(ACCOUNTS_ENDPOINT, {
       email: email,
       password: password
     });
