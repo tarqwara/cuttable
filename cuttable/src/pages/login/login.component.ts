@@ -1,8 +1,8 @@
-import {Component} from '@angular/core';
-import {AccountService} from '../../providers/account-service'
-import {Facebook} from 'ionic-native';
-import {ToastController, NavController} from 'ionic-angular';
-import {HomePage} from '../home/home.component';
+import { Component } from '@angular/core';
+import { AccountService } from '../../providers/account-service'
+import { Facebook } from 'ionic-native';
+import { ToastController, NavController } from 'ionic-angular';
+import { HomePage } from '../home/home.component';
 
 @Component({
   selector: 'login-page',
@@ -19,7 +19,7 @@ export class LoginPage {
   //noinspection JSMethodCanBeStatic
   isLoggedInWithFacebook() {
     return Facebook.getLoginStatus()
-      .then((response) => response.status === 'connected');
+      .then(response => response.status === 'connected');
   }
 
   register() {
@@ -29,7 +29,7 @@ export class LoginPage {
     this.accountService.createAccount(this.email, this.password)
       .subscribe(
         () => this.redirectToHomePage(),
-        (response) => this.showToast(response.json().message)
+        response => this.showToast(response.json().message)
       );
   }
 
@@ -40,19 +40,17 @@ export class LoginPage {
     this.accountService.checkAccountCredentials(this.email, this.password)
       .subscribe(
         () => this.redirectToHomePage(),
-        (response) => this.showToast(response.json().message)
+        response => this.showToast(response.json().message)
       );
   }
 
   facebookLogin() {
     Facebook.login(['public_profile'])
-      .then(
-        (response) => {
-          if (response.status === 'connected') {
-            this.redirectToHomePage();
-          }
+      .then(response => {
+        if (response.status === 'connected') {
+          this.redirectToHomePage();
         }
-      );
+      });
   }
 
   redirectToHomePage() {
