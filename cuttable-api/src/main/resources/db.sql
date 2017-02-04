@@ -22,8 +22,10 @@ CREATE TABLE account_role (
 );
 
 /* INSERT INTO TABLES */
-INSERT INTO account (email, password) VALUES ('test@cuttable.com', 'test123');
-INSERT INTO account_role (email, role) VALUES ('test@cuttable.com', 'ROLE_USER');
+INSERT INTO account (email, password)
+VALUES ('test@cuttable.com', '$2a$10$JlGTuxoWsGStJzy/XYfOPuaa4R8k6Yfb6WA25QgHZ6tyio0br92YO');
+INSERT INTO account_role (email, role)
+VALUES ('test@cuttable.com', 'ROLE_USER');
 
 /* CREATE USERS, REVOKE AND GRANT PRIVILEGES */
 CREATE USER cuttable_api WITH PASSWORD '@pxQTpSX$Ymsk#^0';
