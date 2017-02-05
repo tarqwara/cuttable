@@ -9,23 +9,24 @@ CREATE TYPE role_type AS ENUM ('ROLE_USER', 'ROLE_ADMIN');
 
 /* CREATE TABLES */
 CREATE TABLE account (
-  email    VARCHAR(255) PRIMARY KEY,
+  id       SERIAL PRIMARY KEY,
+  email    VARCHAR(255) UNIQUE,
   password VARCHAR(60) NOT NULL,
   enabled  BOOLEAN     NOT NULL DEFAULT TRUE
 );
 
 CREATE TABLE account_role (
-  id    SERIAL PRIMARY KEY,
-  email VARCHAR(255) NOT NULL,
-  role  role_type    NOT NULL,
-  CONSTRAINT fk_email FOREIGN KEY (email) REFERENCES account (email)
+  id         SERIAL PRIMARY KEY,
+  account_id INTEGER   NOT NULL,
+  role       role_type NOT NULL,
+  CONSTRAINT fk_account FOREIGN KEY (account_id) REFERENCES account (id)
 );
 
 /* INSERT INTO TABLES */
 INSERT INTO account (email, password)
 VALUES ('test@cuttable.com', '$2a$10$JlGTuxoWsGStJzy/XYfOPuaa4R8k6Yfb6WA25QgHZ6tyio0br92YO');
-INSERT INTO account_role (email, role)
-VALUES ('test@cuttable.com', 'ROLE_USER');
+INSERT INTO account_role (account_id, role)
+VALUES (1, 'ROLE_USER');
 
 /* CREATE USERS, REVOKE AND GRANT PRIVILEGES */
 CREATE USER cuttable_api WITH PASSWORD '@pxQTpSX$Ymsk#^0';

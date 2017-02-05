@@ -18,4 +18,7 @@ public class Account {
     @Column(name = "password")
     private String encryptedPassword;
 
+    @Transient
+    private boolean enabled;
+
 }
