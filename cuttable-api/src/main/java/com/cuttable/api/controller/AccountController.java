@@ -24,7 +24,7 @@ public class AccountController {
 
     @PostMapping("register")
     public void register(@RequestBody AccountCredentials accountCredentials) {
-        accountService.createAccount(accountCredentials.getEmail(), accountCredentials.getPassword());
+        accountService.createUserAccount(accountCredentials.getEmail(), accountCredentials.getPassword());
     }
 
 }

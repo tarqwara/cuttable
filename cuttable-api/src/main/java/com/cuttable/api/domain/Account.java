@@ -4,8 +4,8 @@ import lombok.Data;
 
 import javax.persistence.*;
 
-@Entity
 @Data
+@Entity
 public class Account {
 
     @Id
@@ -18,7 +18,6 @@ public class Account {
     @Column(name = "password")
     private String encryptedPassword;
 
-    @Transient
     private boolean enabled;
 
 }

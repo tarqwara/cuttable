@@ -1,9 +1,11 @@
-import {NgModule, ErrorHandler} from '@angular/core';
-import {IonicApp, IonicModule, IonicErrorHandler} from 'ionic-angular';
-import {MyApp} from './app.component';
-import {LoginPage} from '../pages/login/login.component';
-import {HomePage} from '../pages/home/home.component';
-import {HttpService} from '../providers/http-service';
+import { NgModule, ErrorHandler } from '@angular/core';
+import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
+import { Storage } from '@ionic/storage';
+import { MyApp } from './app.component';
+import { LoginPage } from '../pages/login/login.component';
+import { HomePage } from '../pages/home/home.component';
+import { HttpService } from '../providers/http-service';
+import { TokenService } from '../providers/token-service';
 
 @NgModule({
   declarations: [
@@ -21,8 +23,10 @@ import {HttpService} from '../providers/http-service';
     HomePage
   ],
   providers: [
-    {provide: ErrorHandler, useClass: IonicErrorHandler},
-    HttpService
+    { provide: ErrorHandler, useClass: IonicErrorHandler },
+    HttpService,
+    TokenService,
+    Storage
   ]
 })
 export class AppModule {

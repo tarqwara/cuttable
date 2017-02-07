@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
+import { ToastController, NavController, LoadingController, Loading } from 'ionic-angular';
 import { AccountService } from '../../providers/account-service'
-import { Facebook } from 'ionic-native';
-import { ToastController, NavController } from 'ionic-angular';
+import { TokenService } from '../../providers/token-service';
 import { HomePage } from '../home/home.component';
+import { Account } from '../../models/account';
 
 @Component({
   selector: 'login-page',
@@ -10,58 +11,85 @@ import { HomePage } from '../home/home.component';
   providers: [AccountService]
 })
 export class LoginPage {
-  email: string;
-  password: string;
+  account: Account;
 
-  constructor(public accountService: AccountService, public toastCtrl: ToastController, public navCtrl: NavController) {
+  constructor(public accountService: AccountService, public toastCtrl: ToastController, public navCtrl: NavController,
+    public loadingCtrl: LoadingController, public tokenService: TokenService) {
+    this.redirectToHomePageIfLoggedIn();
+    this.account = new Account();
   }
 
-  //noinspection JSMethodCanBeStatic
-  isLoggedInWithFacebook() {
-    return Facebook.getLoginStatus()
-      .then(response => response.status === 'connected');
-  }
-
-  register() {
-    if (!this.email || !this.password) {
-      return;
-    }
-    this.accountService.createAccount(this.email, this.password)
-      .subscribe(
-        () => this.redirectToHomePage(),
-        response => this.showToast(response.json().message)
-      );
-  }
-
-  login() {
-    if (!this.email || !this.password) {
-      return;
-    }
-    this.accountService.checkAccountCredentials(this.email, this.password)
-      .subscribe(
-        () => this.redirectToHomePage(),
-        response => this.showToast(response.json().message)
-      );
-  }
-
-  facebookLogin() {
-    Facebook.login(['public_profile'])
-      .then(response => {
-        if (response.status === 'connected') {
-          this.redirectToHomePage();
+  redirectToHomePageIfLoggedIn(): void {
+    this.tokenService.getJWTToken().subscribe(
+      token => {
+        if (token) {
+          this.redirectToHomePage()
         }
-      });
+      }
+    );
   }
 
-  redirectToHomePage() {
+  redirectToHomePage(): void {
     this.navCtrl.push(HomePage);
   }
 
-  showToast(message: string) {
+  createLoader(): Loading {
+    return this.loadingCtrl.create({
+      dismissOnPageChange: true
+    });
+  }
+
+  showToast(message: string): void {
     let toast = this.toastCtrl.create({
       message: message,
       duration: 3000
     });
     toast.present();
   }
+
+  handleLogin(loader: Loading): void {
+    this.accountService.login(this.account).subscribe(
+      response => {
+        this.tokenService.saveJWTTokenToStorage(response).subscribe(
+          () => this.redirectToHomePage(),
+          e => {
+            console.log(e);
+            loader.dismiss();
+            this.showToast('Something went wrong');
+          }
+        );
+      },
+      response => {
+        loader.dismiss();
+        if (response.status === 401) {
+          this.showToast('Wrong username or password');
+        }
+      }
+    );
+  }
+
+  register(): void {
+    if (!this.account.email || !this.account.password) {
+      return;
+    }
+    let loader = this.createLoader();
+    loader.present();
+    this.accountService.register(this.account).subscribe(
+      () => this.handleLogin(loader),
+      response => {
+        loader.dismiss();
+        this.showToast(response.json().message);
+      }
+    );
+  }
+
+  login(): void {
+    if (!this.account.email || !this.account.password) {
+      return;
+    }
+    let loader = this.createLoader();
+    loader.present();
+    this.handleLogin(loader);
+  }
+
 }

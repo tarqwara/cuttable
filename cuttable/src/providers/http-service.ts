@@ -1,37 +1,37 @@
-import {Injectable} from '@angular/core';
-import {Http, Headers, RequestOptions, URLSearchParams} from '@angular/http';
-import {Config} from '../config/config';
-import {forOwn} from 'lodash';
+import { Injectable } from '@angular/core';
+import { Http, Headers, Response } from '@angular/http';
+import { Config } from '../config/config';
+import { Observable } from 'rxjs/Rx';
+import { TokenService } from './token-service';
+import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/mergeMap';
 
 @Injectable()
 export class HttpService {
 
-  constructor(public http: Http) {
+  constructor(public http: Http, public tokenService: TokenService) {
   }
 
-  get(endpoint: string, params: Object) {
-    let headers = new Headers({'Content-Type': 'application/x-www-form-urlencoded'});
-    let searchParams = new URLSearchParams();
-    forOwn(params, function(value, key) {
-      searchParams.set(key, value);
+  createHeaders(): Observable<Headers> {
+    let headers = new Headers({
+      'Content-Type': 'application/json'
     });
-    let options = new RequestOptions({
-      headers: headers,
-      search: searchParams
-    });
-    return this.http.get(Config.API_URL + endpoint, options);
+    return this.tokenService.getJWTToken().map(
+      token => {
+        if (token) {
+          headers.append('Authorization', token);
+        }
+        return headers;
+      }
+    );
   }
 
-  post(endpoint: string, params: Object) {
-    let headers = new Headers({'Content-Type': 'application/x-www-form-urlencoded'});
-    let searchParams = new URLSearchParams();
-    forOwn(params, function(value, key) {
-      searchParams.set(key, value);
+  post(endpoint: string, body: Object): Observable<Response> {
+    return this.createHeaders().flatMap(headers => {
+      return this.http.post(Config.API_URL + endpoint, body, {
+        headers: headers
+      });
     });
-    let options = new RequestOptions({
-      headers: headers,
-      search: searchParams
-    });
-    return this.http.post(Config.API_URL + endpoint, {}, options);
   }
+
 }

@@ -1,26 +1,32 @@
-import {Injectable} from '@angular/core';
-import {HttpService} from './http-service';
-import 'rxjs/add/operator/map';
+import { Injectable } from '@angular/core';
+import { Http, Response, Headers } from '@angular/http';
+import { Observable } from 'rxjs/Rx';
+import { Account } from '../models/account';
+import { Config } from '../config/config';
 
-const ACCOUNTS_ENDPOINT = '/accounts';
+const REGISTER_ENDPOINT = '/accounts/register';
+const LOGIN_ENDPOINT = '/login';
 
 @Injectable()
 export class AccountService {
 
-  constructor(public httpService: HttpService) {
-  }
+  constructor(public http: Http) { }
 
-  checkAccountCredentials(email: string, password: string) {
-    return this.httpService.get(ACCOUNTS_ENDPOINT, {
-      email: email,
-      password: password
+  createHeaders(): Headers {
+    return new Headers({
+      'Content-Type': 'application/json'
     });
   }
 
-  createAccount(email: string, password: string) {
-    return this.httpService.post(ACCOUNTS_ENDPOINT, {
-      email: email,
-      password: password
+  register(account: Account): Observable<Response> {
+    return this.http.post(Config.API_URL + REGISTER_ENDPOINT, account, {
+      headers: this.createHeaders()
+    });
+  }
+
+  login(account: Account): Observable<Response> {
+    return this.http.post(Config.API_URL + LOGIN_ENDPOINT, account, {
+      headers: this.createHeaders()
     });
   }
 

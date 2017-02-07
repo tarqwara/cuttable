@@ -1,5 +1,6 @@
 package com.cuttable.api.security.jwt;
 
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -28,11 +29,15 @@ public class LoginFilter extends AbstractAuthenticationProcessingFilter {
     public Authentication attemptAuthentication(HttpServletRequest httpServletRequest,
                                                 HttpServletResponse httpServletResponse)
             throws AuthenticationException, IOException, ServletException {
-        AccountCredentials credentials = new ObjectMapper().readValue(httpServletRequest.getInputStream(),
-                AccountCredentials.class);
-        UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(credentials.getEmail(),
-                credentials.getPassword());
-        return getAuthenticationManager().authenticate(token);
+        try {
+            AccountCredentials credentials = new ObjectMapper().readValue(httpServletRequest.getInputStream(),
+                    AccountCredentials.class);
+            UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(credentials.getEmail(),
+                    credentials.getPassword());
+            return getAuthenticationManager().authenticate(token);
+        } catch (JsonMappingException e) {
+            return null;
+        }
     }
 
     @Override
