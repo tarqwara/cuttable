@@ -5,6 +5,8 @@ import { Observable } from 'rxjs/Rx';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/mergeMap';
 
+const BEARER = 'Bearer';
+
 @Injectable()
 export class TokenService {
 
@@ -17,12 +19,11 @@ export class TokenService {
 			return Observable.throw('Authorization header missing');
 		}
 
-		let index = authorizationHeader.indexOf('Bearer');
-		if (index === -1) {
+		if (!authorizationHeader.startsWith(BEARER)) {
 			return Observable.throw('Bearer missing in authorization header');
 		}
 
-		let JWTToken = authorizationHeader.substr(index).trim();
+		let JWTToken = authorizationHeader.substr(BEARER.length + 1);
 		return Observable.fromPromise(this.storage.set('JWTToken', JWTToken));
 	}
 

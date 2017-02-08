@@ -52,8 +52,7 @@ export class LoginPage {
       response => {
         this.tokenService.saveJWTTokenToStorage(response).subscribe(
           () => this.redirectToHomePage(),
-          e => {
-            console.log(e);
+          () => {
             loader.dismiss();
             this.showToast('Something went wrong');
           }
