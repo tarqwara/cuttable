@@ -19,9 +19,6 @@ $font-path: "../assets/fonts";
 // colors so you can add, rename and remove colors as needed.
 // The "primary" color is the only required color in the map.
 
-$text-color: #212121;
-$secondary-text-color: #757575;
-
 $colors: (
   primary: #FFC107,
   secondary: #607D8B,
@@ -30,6 +27,18 @@ $colors: (
   dark: #FFA000,
   facebook: #3B5998
 );
+
+$text-color: #212121;
+$secondary-text-color: #757575;
+$toolbar-background: color($colors, primary);
+$toolbar-md-title-text-color: $text-color;
+$toolbar-ios-title-text-color: $text-color;
+$toolbar-wp-title-text-color: $text-color;
+$tabs-background: color($colors, primary);
+$tabs-tab-color-active: white;
+$tabs-md-tab-color-inactive: $text-color;
+$tabs-ios-tab-color-inactive: $text-color;
+$tabs-wp-tab-color-inactive: $text-color;
 
 // App iOS Variables
 // --------------------------------------------------

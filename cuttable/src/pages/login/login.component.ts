@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { ToastController, NavController, LoadingController, Loading } from 'ionic-angular';
 import { AccountService } from '../../providers/account-service'
 import { TokenService } from '../../providers/token-service';
-import { HomePage } from '../home/home.component';
+import { TabsPage } from '../tabs/tabs.component';
 import { Account } from '../../models/account';
 
 @Component({
@@ -12,31 +12,33 @@ import { Account } from '../../models/account';
 })
 export class LoginPage {
   account: Account;
+  loader: Loading;
 
-  constructor(public accountService: AccountService, public toastCtrl: ToastController, public navCtrl: NavController,
-    public loadingCtrl: LoadingController, public tokenService: TokenService) {
-    this.redirectToHomePageIfLoggedIn();
+  constructor(private accountService: AccountService, private toastCtrl: ToastController,
+    private navCtrl: NavController, private loadingCtrl: LoadingController, private tokenService: TokenService) {
+    this.redirectToTabsPageIfLoggedIn();
     this.account = new Account();
   }
 
-  redirectToHomePageIfLoggedIn(): void {
+  redirectToTabsPageIfLoggedIn(): void {
     this.tokenService.getJWTToken().subscribe(
       token => {
         if (token) {
-          this.redirectToHomePage()
+          this.redirectToTabsPage();
         }
       }
     );
   }
 
-  redirectToHomePage(): void {
-    this.navCtrl.push(HomePage);
+  redirectToTabsPage(): void {
+    this.navCtrl.setRoot(TabsPage);
   }
 
-  createLoader(): Loading {
-    return this.loadingCtrl.create({
+  showLoader(): void {
+    this.loader = this.loadingCtrl.create({
       dismissOnPageChange: true
     });
+    this.loader.present();
   }
 
   showToast(message: string): void {
@@ -47,19 +49,19 @@ export class LoginPage {
     toast.present();
   }
 
-  handleLogin(loader: Loading): void {
+  handleLogin(): void {
     this.accountService.login(this.account).subscribe(
       response => {
         this.tokenService.saveJWTTokenToStorage(response).subscribe(
-          () => this.redirectToHomePage(),
+          () => this.redirectToTabsPage(),
           () => {
-            loader.dismiss();
+            this.loader.dismiss();
             this.showToast('Something went wrong');
           }
         );
       },
       response => {
-        loader.dismiss();
+        this.loader.dismiss();
         if (response.status === 401) {
           this.showToast('Wrong username or password');
         }
@@ -71,12 +73,11 @@ export class LoginPage {
     if (!this.account.email || !this.account.password) {
       return;
     }
-    let loader = this.createLoader();
-    loader.present();
+    this.showLoader();
     this.accountService.register(this.account).subscribe(
-      () => this.handleLogin(loader),
+      () => this.handleLogin(),
       response => {
-        loader.dismiss();
+        this.loader.dismiss();
         this.showToast(response.json().message);
       }
     );
@@ -86,9 +87,8 @@ export class LoginPage {
     if (!this.account.email || !this.account.password) {
       return;
     }
-    let loader = this.createLoader();
-    loader.present();
-    this.handleLogin(loader);
+    this.showLoader();
+    this.handleLogin();
   }
 
 }
