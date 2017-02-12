@@ -6,6 +6,7 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/mergeMap';
 
 const BEARER = 'Bearer';
+const JWT_TOKEN = 'JWTToken';
 
 @Injectable()
 export class TokenService {
@@ -24,11 +25,15 @@ export class TokenService {
 		}
 
 		let JWTToken = authorizationHeader.substr(BEARER.length + 1);
-		return Observable.fromPromise(this.storage.set('JWTToken', JWTToken));
+		return Observable.fromPromise(this.storage.set(JWT_TOKEN, JWTToken));
 	}
 
 	getJWTToken(): Observable<any> {
-		return Observable.fromPromise(this.storage.get('JWTToken'));
+		return Observable.fromPromise(this.storage.get(JWT_TOKEN));
+	}
+
+	removeJWTToken(): Observable<any> {
+		return Observable.fromPromise(this.storage.remove(JWT_TOKEN));
 	}
 
 };

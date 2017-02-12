@@ -22,7 +22,7 @@ import { TokenService } from '../providers/token-service';
     SettingsPage
   ],
   imports: [
-    IonicModule.forRoot(MyApp)
+    IonicModule.forRoot(MyApp, { scrollAssist: false, autoFocusAssist: false })
   ],
   bootstrap: [IonicApp],
   entryComponents: [

@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Platform } from 'ionic-angular';
-import { StatusBar, Splashscreen } from 'ionic-native';
+import { StatusBar, Splashscreen, Keyboard } from 'ionic-native';
 import { LoginPage } from '../pages/login/login.component';
 
 @Component({
@@ -21,4 +21,17 @@ export class MyApp {
       Splashscreen.hide();
     });
   }
+
+  ionViewDidEnter() {
+    this.platform.ready().then(() => {
+      Keyboard.disableScroll(true);
+    });
+  }
+
+  ionViewWillLeave() {
+    this.platform.ready().then(() => {
+      Keyboard.disableScroll(false);
+    });
+  }
+
 }

@@ -35,9 +35,7 @@ export class LoginPage {
   }
 
   showLoader(): void {
-    this.loader = this.loadingCtrl.create({
-      dismissOnPageChange: true
-    });
+    this.loader = this.loadingCtrl.create();
     this.loader.present();
   }
 
@@ -53,7 +51,10 @@ export class LoginPage {
     this.accountService.login(this.account).subscribe(
       response => {
         this.tokenService.saveJWTTokenToStorage(response).subscribe(
-          () => this.redirectToTabsPage(),
+          () => {
+            this.loader.dismiss();
+            this.redirectToTabsPage();
+          },
           () => {
             this.loader.dismiss();
             this.showToast('Something went wrong');
