@@ -8,8 +8,8 @@ import { HomePage } from '../pages/home/home.component';
 import { SalonsPage } from '../pages/salons/salons.component';
 import { AppointmentsPage } from '../pages/appointments/appointments.component';
 import { SettingsPage } from '../pages/settings/settings.component';
-import { HttpService } from '../providers/http-service';
-import { TokenService } from '../providers/token-service';
+import { HttpService } from '../providers/http.service';
+import { TokenService } from '../providers/token.service';
 
 @NgModule({
   declarations: [

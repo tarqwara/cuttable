@@ -1,17 +1,17 @@
 import { Component } from '@angular/core';
-import { AccountService } from '../../providers/account-service';
+import { AuthService } from '../../providers/auth.service';
 
 @Component({
 	selector: 'settings-page',
 	templateUrl: 'settings.html',
-	providers: [AccountService]
+	providers: [AuthService]
 })
 export class SettingsPage {
 
-	constructor(private accountService: AccountService) { }
+	constructor(private authService: AuthService) { }
 
 	logout(): void {
-		this.accountService.logout();
+		this.authService.logout();
 	}
 
 }

@@ -2,14 +2,14 @@ import { Injectable } from '@angular/core';
 import { Http, Headers, Response } from '@angular/http';
 import { Config } from '../config/config';
 import { Observable } from 'rxjs/Rx';
-import { TokenService } from './token-service';
+import { TokenService } from './token.service';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/mergeMap';
 
 @Injectable()
 export class HttpService {
 
-  constructor(public http: Http, public tokenService: TokenService) {
+  constructor(private http: Http, private tokenService: TokenService) {
   }
 
   createHeaders(): Observable<Headers> {

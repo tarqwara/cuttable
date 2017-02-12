@@ -1,20 +1,20 @@
 import { Component } from '@angular/core';
 import { ToastController, NavController, LoadingController, Loading } from 'ionic-angular';
-import { AccountService } from '../../providers/account-service'
-import { TokenService } from '../../providers/token-service';
+import { AuthService } from '../../providers/auth.service'
+import { TokenService } from '../../providers/token.service';
 import { TabsPage } from '../tabs/tabs.component';
 import { Account } from '../../models/account';
 
 @Component({
   selector: 'login-page',
   templateUrl: 'login.html',
-  providers: [AccountService]
+  providers: [AuthService]
 })
 export class LoginPage {
   account: Account;
   loader: Loading;
 
-  constructor(private accountService: AccountService, private toastCtrl: ToastController,
+  constructor(private authService: AuthService, private toastCtrl: ToastController,
     private navCtrl: NavController, private loadingCtrl: LoadingController, private tokenService: TokenService) {
     this.redirectToTabsPageIfLoggedIn();
     this.account = new Account();
@@ -48,7 +48,7 @@ export class LoginPage {
   }
 
   handleLogin(): void {
-    this.accountService.login(this.account).subscribe(
+    this.authService.login(this.account).subscribe(
       response => {
         this.tokenService.saveJWTTokenToStorage(response).subscribe(
           () => {
@@ -75,7 +75,7 @@ export class LoginPage {
       return;
     }
     this.showLoader();
-    this.accountService.register(this.account).subscribe(
+    this.authService.register(this.account).subscribe(
       () => this.handleLogin(),
       response => {
         this.loader.dismiss();

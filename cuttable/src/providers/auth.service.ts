@@ -5,13 +5,13 @@ import { Observable } from 'rxjs/Rx';
 import { Account } from '../models/account';
 import { Config } from '../config/config';
 import { LoginPage } from '../pages/login/login.component';
-import { TokenService } from './token-service';
+import { TokenService } from './token.service';
 
 const REGISTER_ENDPOINT = '/accounts/register';
 const LOGIN_ENDPOINT = '/login';
 
 @Injectable()
-export class AccountService {
+export class AuthService {
 
   constructor(private http: Http, private tokenService: TokenService, private navCtrl: NavController,
     private app: App) { }

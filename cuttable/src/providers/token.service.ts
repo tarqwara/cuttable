@@ -11,7 +11,7 @@ const JWT_TOKEN = 'JWTToken';
 @Injectable()
 export class TokenService {
 
-	constructor(public storage: Storage) { }
+	constructor(private storage: Storage) { }
 
 	saveJWTTokenToStorage(response: Response): Observable<any> {
 		let headers = response.headers;
