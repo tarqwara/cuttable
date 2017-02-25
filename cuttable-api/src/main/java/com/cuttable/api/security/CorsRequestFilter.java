@@ -13,8 +13,7 @@ class CorsRequestFilter extends CorsFilter {
     private static UrlBasedCorsConfigurationSource configurationSource() {
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true);
-        config.addAllowedOrigin("http://192.168.1.68:8100");
-        config.addAllowedOrigin("http://192.168.1.242:8100");
+        config.addAllowedOrigin("http://localhost:8100");
         config.addAllowedHeader("*");
         config.addExposedHeader("Authorization");
         config.addAllowedMethod("*");

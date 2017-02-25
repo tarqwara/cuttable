@@ -30,9 +30,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
         http.csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/").permitAll()
                 .antMatchers(HttpMethod.POST, "/login").permitAll()
                 .antMatchers(HttpMethod.POST, "/accounts/register").permitAll()
+                .antMatchers("/img/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .addFilterBefore(new CorsRequestFilter(), UsernamePasswordAuthenticationFilter.class)
